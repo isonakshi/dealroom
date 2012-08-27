@@ -48,6 +48,23 @@ function ISODateString(d){
       + pad(d.getUTCSeconds())+'.000+0000'
 }
 
+function onDiscFetch(response) {
+    if (response.error) {
+        mini.createDismissibleMessage("Unable to fetch discussions: " + response.error.message);
+        return;
+    }
+    var discussions = response.list;
+    console.log ("Discussions: "+JSON.stringify(discussions));
+}
+
+function loadDiscussions(source) {
+osapi.jive.corev3.discussions.get ({
+        fields : '@all',
+	place : source
+    }).execute(onDiscFetch);
+}
+
+
 // Defines what needs to be done once Project is created
 
 function onProjectCreated(response) {
@@ -77,8 +94,9 @@ function onGroupCreated(response) {
 	var gMessage = document.getElementById("response-message");
 	gMessage.innerHTML = "Group successfully created. <br /> Click <a href=\""+response.resources.html.ref+"\">here</a> to visit the group";
 	// Add GROUP Content-Copying here!
-	var spaceDiscussions = osapi.jive.corev3.discussions.get(templateSpace);
-	console.log("Space Discussions: "+JSON.stringify(spaceDiscussions));
+	loadDiscussions(templateSpace);
+
+
 	//Project creation within the newly created group
 	
 	var pStartDateEntry = $("#project-start-date").val(); //Project Start
