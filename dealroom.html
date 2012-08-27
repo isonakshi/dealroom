@@ -9,7 +9,7 @@
 <script type="text/javascript">
 
 // Templates' IDs for the current AI instance
-var templateSpace = "/places/1002"; //actually, a SPACE
+var templateSpace = "/places/1060"; //actually, a SPACE
 var templateSpaceURI = "https://accenture.jiveon.com/community/deal-room-template";
 var templateProject = "/places/1001";
 var templateProjectURI = "https://accenture.jiveon.com/community/deal-room-template/projects/rfp-response-template-project";
@@ -60,7 +60,7 @@ function onDiscFetch(response) {
 function loadDiscussions(source) {
 osapi.jive.corev3.discussions.get ({
         fields : '@all',
-	place : '/places/1002'
+	place : source
     }).execute(onDiscFetch);
 }
 
