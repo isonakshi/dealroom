@@ -52,6 +52,13 @@ function ISODateString(d){
       + pad(d.getUTCSeconds())+'.000+0000'
 }
 
+function onContentCreated (response) {
+    if (response.error) {
+        mini.createDismissibleMessage("Unable to create discussions: " + response.error.message);
+        return;
+    }
+}
+
 function onDiscFetch(response) {
     if (response.error) {
         mini.createDismissibleMessage("Unable to fetch discussions: " + response.error.message);
@@ -80,7 +87,7 @@ function onDiscFetch(response) {
 	postDisc.question = group.question;
 	postDisc.parent = targetGroupID;
 	
-	osapi.jive.corev3.discussions.create (postDisc);
+	osapi.jive.corev3.discussions.create(postDisc).execute(onContentCreated);
 	});
     console.log ("Discussions: "+JSON.stringify(discussions));
 }
