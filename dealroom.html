@@ -8,14 +8,20 @@
 
     <script type="text/javascript">
 
+// Templates' IDs for the current AI instance
+var templateGroup = 2004; //actually, a SPACE
+var templateProject = 1001;
+
 // Flag indicating we are in add mode
 var adding = true;
 
 // Jive Group selector
 var group;
+var sourceSpace;
 
 // Jive Project selector
 var project;
+var sourceProject;
 
 // Factory for mini messages
 var mini;
@@ -95,6 +101,8 @@ function onGroupCreated(response) {
 			"type" : "project"
 		};
 		
+		sourceProject = project;
+
 		project.displayName = pName;
 		project.name = "Project for " + pName;
 		project.parent = pParent;;
@@ -115,6 +123,7 @@ function onGroupSave() {
         name : "",
         type : "group"
     };
+
     group.description = $("#group-name").val();
     group.description = "This is a deal room created for collaborating on the deal \"" + group.description + "\"";
     group.displayName = $("#group-name").val();
