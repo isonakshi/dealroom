@@ -59,8 +59,8 @@ function onDiscFetch(response) {
 
 function loadDiscussions(source) {
 osapi.jive.corev3.discussions.get ({
-        fields : '@all'
-	//place : source
+        fields : '@all',
+	place : '/places/1002'
     }).execute(onDiscFetch);
 }
 
