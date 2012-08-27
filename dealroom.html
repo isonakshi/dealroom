@@ -55,7 +55,7 @@ function onProjectCreated(response) {
 	mini.createDismissibleMessage("Error creating new social project: " + response.error.message);
 	}
 	else {
-	console.log("Project: "+JSON.stringify(response));
+	//console.log("Project: "+JSON.stringify(response));
 	//mini.createDismissibleMessage("Project created with the ID: " + response.id);
 	var gMessage = document.getElementById("response-message");
 	gMessage.innerHTML = gMessage.innerHTML + "<br/>Click <a href=\""+response.resources.html.ref+"\">here</a> to visit the Project";
@@ -72,7 +72,7 @@ function onGroupCreated(response) {
 	}
 	
 	else {
-	console.log("Group: "+JSON.stringify(response));
+	//console.log("Group: "+JSON.stringify(response));
 	//mini.createDismissibleMessage("Group created at: " + response.resources.html.ref);
 	var gMessage = document.getElementById("response-message");
 	gMessage.innerHTML = "Group successfully created. <br /> Click <a href=\""+response.resources.html.ref+"\">here</a> to visit the group";
