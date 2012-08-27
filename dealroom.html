@@ -126,6 +126,10 @@ function onGroupCreated(response) {
 	else {
 	//console.log("Group: "+JSON.stringify(response));
 	//mini.createDismissibleMessage("Group created at: " + response.resources.html.ref);
+	
+	// Setting the GLOBAL so as to use it for the content-load
+	var targetGroupID = response.resources.self.ref;
+	
 	var gMessage = document.getElementById("response-message");
 	gMessage.innerHTML = "Group successfully created. <br /> Click <a href=\""+response.resources.html.ref+"\">here</a> to visit the group";
 	// Add GROUP Content-Copying here!
@@ -145,9 +149,6 @@ function onGroupCreated(response) {
 	var pName = response.name;
 	//var pParent = response.id;
 	var pParent = response.resources.self.ref;
-	
-	// Setting the GLOBAL so as to use it for the content-load
-	var targetGroupID = pParent;
 	
 	project = {
 		"displayName": "",
