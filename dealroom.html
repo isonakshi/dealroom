@@ -78,7 +78,7 @@ function onGroupCreated(response) {
 	gMessage.innerHTML = "Group successfully created. <br /> Click <a href=\""+response.resources.html.ref+"\">here</a> to visit the group";
 	// Add GROUP Content-Copying here!
 	var spaceDiscussions = osapi.jive.corev3.discussions.get(templateSpaceURI);
-	console.log(JSON.stringify(spaceDiscussions));
+	console.log("Space Discussions: "+JSON.stringify(spaceDiscussions));
 	//Project creation within the newly created group
 	
 	var pStartDateEntry = $("#project-start-date").val(); //Project Start
