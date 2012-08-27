@@ -49,9 +49,9 @@ function onGroupCreated(response) {
 	else
 	{
 		console.log("Group: "+JSON.stringify(response));
-		mini.createDismissibleMessage("Group created at: " + response.html.ref);
+		mini.createDismissibleMessage("Group created at: " + response.resources.html.ref);
 		var gMessage = document.getElementById("response-message");
-		gMessage.innerHTML = "Click <a href=\""+response.html.ref+"\">here</a> to visit the group";
+		gMessage.innerHTML = "Click <a href=\""+response.resources.html.ref+"\">here</a> to visit the group";
 		// Add GROUP Content-Copying here!
 		//Project creation within the newly created group
 		
@@ -64,7 +64,8 @@ function onGroupCreated(response) {
 		var pDueDate = pDueDateAbs.toISOString();
 		
 		var pName = response.name;
-		var pParent = response.id;
+		//var pParent = response.id;
+		var pParent = response.resources.html.ref;
 		
 		project = {
 			"displayName": "",
@@ -77,7 +78,7 @@ function onGroupCreated(response) {
 		
 		project.displayName = pName;
 		project.name = "Project for the deal" + pName;
-		project.parent = "https://accenture.jiveon.com/groups/" + pParent;
+		project.parent = pParent;;
 		project.startDate = pStartDate;
 		project.dueDate = pDueDate;
 		
