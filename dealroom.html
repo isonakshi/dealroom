@@ -96,7 +96,7 @@ function onGroupCreated(response) {
 		};
 		
 		project.displayName = pName;
-		project.name = "Project for the deal" + pName;
+		project.name = "Project for " + pName;
 		project.parent = pParent;;
 		project.startDate = pStartDate;
 		project.dueDate = pDueDate;
@@ -116,7 +116,7 @@ function onGroupSave() {
         type : "group"
     };
     group.description = $("#group-name").val();
-    group.description = "This is a deal room created for discussing " + group.description;
+    group.description = "This is a deal room created for collaborating on the deal \"" + group.description + "\"";
     group.displayName = $("#group-name").val();
     group.groupType = "PRIVATE";
     group.contentTypes = [ "documents", "files", "discussions", "projects" ];
