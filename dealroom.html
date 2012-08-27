@@ -34,7 +34,9 @@ function onProjectCreated(response) {
 	else
 	{
 		console.log("Project: "+JSON.stringify(response));
-		mini.createDismissibleMessage("Project created with the ID: " + response.id);	
+		//mini.createDismissibleMessage("Project created with the ID: " + response.id);
+		var gMessage = document.getElementById("response-message");
+		gMessage.innerHTML = gMessage.innerHTML + "<br/>Click <a href=\""+response.resources.html.ref+"\">here</a> to visit the Project";
 	}
 }
 
@@ -64,7 +66,7 @@ function onGroupCreated(response) {
 		console.log("Group: "+JSON.stringify(response));
 		mini.createDismissibleMessage("Group created at: " + response.resources.html.ref);
 		var gMessage = document.getElementById("response-message");
-		gMessage.innerHTML = "Click <a href=\""+response.resources.html.ref+"\">here</a> to visit the group";
+		gMessage.innerHTML = "Group successfully created. <br /> Click <a href=\""+response.resources.html.ref+"\">here</a> to visit the group";
 		// Add GROUP Content-Copying here!
 		//Project creation within the newly created group
 		
