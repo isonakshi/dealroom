@@ -63,7 +63,7 @@ function onDiscFetch(response) {
 	$.each(discussions, function(index, group) {
 	postDisc = {
 	type = "",
-	tags = [],
+	tags = "",
 	subject = "",
 	content = {
 		text = "",
@@ -74,7 +74,7 @@ function onDiscFetch(response) {
 	}
 	
 	postDisc.type = group.type;
-	postDisc.tags[]=group.tags[];
+	postDisc.tags=group.tags;
 	postDisc.subject = group.subject;
 	postDisc.content = group.content;
 	postDisc.question = group.question;
