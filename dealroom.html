@@ -27,18 +27,6 @@ function init() {
     mini = new gadgets.MiniMessage();
 }
 
-function onProjectCreated(response) {
-    if (response.error) {
-        mini.createDismissibleMessage("Error creating new social project: " + response.error.message);
-    }
-	else
-	{
-		console.log("Project: "+JSON.stringify(response));
-		//mini.createDismissibleMessage("Project created with the ID: " + response.id);
-		var gMessage = document.getElementById("response-message");
-		gMessage.innerHTML = gMessage.innerHTML + "<br/>Click <a href=\""+response.resources.html.ref+"\">here</a> to visit the Project";
-	}
-}
 
 /* use a function for the exact format desired... */
 /* for ISO 8601 Date */
@@ -52,7 +40,22 @@ function ISODateString(d){
       + pad(d.getUTCSeconds())+'.000+0000'
 }
 
-// Defines what needs to be done, once group is created
+// Defines what needs to be done once Project is created
+
+function onProjectCreated(response) {
+    if (response.error) {
+        mini.createDismissibleMessage("Error creating new social project: " + response.error.message);
+    }
+	else
+	{
+		console.log("Project: "+JSON.stringify(response));
+		//mini.createDismissibleMessage("Project created with the ID: " + response.id);
+		var gMessage = document.getElementById("response-message");
+		gMessage.innerHTML = gMessage.innerHTML + "<br/>Click <a href=\""+response.resources.html.ref+"\">here</a> to visit the Project";
+	}
+}
+
+// Defines what needs to be done once group is created
 // 1. Copy the contents from template group to the new
 // 2. Create Project
 
@@ -64,7 +67,7 @@ function onGroupCreated(response) {
 	else
 	{
 		console.log("Group: "+JSON.stringify(response));
-		mini.createDismissibleMessage("Group created at: " + response.resources.html.ref);
+		//mini.createDismissibleMessage("Group created at: " + response.resources.html.ref);
 		var gMessage = document.getElementById("response-message");
 		gMessage.innerHTML = "Group successfully created. <br /> Click <a href=\""+response.resources.html.ref+"\">here</a> to visit the group";
 		// Add GROUP Content-Copying here!
