@@ -49,11 +49,12 @@ function onGroupCreated(response) {
 	else
 	{
 		console.log("Group: "+JSON.stringify(response));
-		mini.createDismissibleMessage("Group created with the ID: " + response.id);
+		mini.createDismissibleMessage("Group created at: " + response.html.ref);
+		var gMessage = document.getElementById("response-message");
+		gMessage.innerHTML = "Click <a href=\""+response.html.ref+"\">here</a> to visit the group";
 		// Add GROUP Content-Copying here!
-		
 		//Project creation within the newly created group
-		var pStartDateAbs = new Date ($("#group-name").val()); //Project Start
+		var pStartDateAbs = $("#group-name").val(); //Project Start
 		var pStartDate = pStartDateAbs.toISOString();
 		var pName = response.name;
 		var pParent = response.id;
@@ -74,7 +75,6 @@ function onGroupCreated(response) {
 		project.dueDate = pStartDate;
 		
 		osapi.jive.corev3.projects.create(project).execute(onProjectCreated);
-		
 	}
 }
 
@@ -136,6 +136,7 @@ gadgets.util.registerOnLoadHandler(init);
             </tr>
         </table>
     </div>
+	<div id="response-message"></div>
 </div>
 </body>
 </html>
