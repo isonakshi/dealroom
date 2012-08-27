@@ -35,6 +35,15 @@ function onGroupAdded(response) {
 }
 
 function onGroupSave() {
+    group = {
+        displayName : "",
+        description : "",
+        followerCount : 0,
+        groupType : "",
+        memberCount : 0,
+        name : "",
+        type : "group"
+    };
     group.description = $("#group-name").val();
     group.description = "This is a deal room created for discussing " + group.description;
     group.displayName = $("#group-name").val();
