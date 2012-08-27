@@ -10,7 +10,9 @@
 
 // Templates' IDs for the current AI instance
 var templateSpace = 2004; //actually, a SPACE
+var templateSpaceURI = "https://accenture.jiveon.com/community/deal-room-template";
 var templateProject = 1001;
+var templateProjectURI = "https://accenture.jiveon.com/community/deal-room-template/projects/rfp-response-template-project";
 
 // Flag indicating we are in add mode
 var adding = true;
@@ -75,6 +77,8 @@ function onGroupCreated(response) {
 	var gMessage = document.getElementById("response-message");
 	gMessage.innerHTML = "Group successfully created. <br /> Click <a href=\""+response.resources.html.ref+"\">here</a> to visit the group";
 	// Add GROUP Content-Copying here!
+	var spaceDiscussions[] = osapi.jive.corev3.discussions.get(templateSpaceURI);
+	console.log(JSON.stringify(spaceDiscussions));
 	//Project creation within the newly created group
 	
 	var pStartDateEntry = $("#project-start-date").val(); //Project Start
