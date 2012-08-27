@@ -95,7 +95,7 @@ function onGroupCreated(response) {
 			"displayName": "",
 			"name": "",
 			"parent" : "",
-			"contentTypes" : [ "documents", "files", "discussions", "polls", "projects", "tasks" ],
+			"contentTypes" : [ "documents", "files", "discussions", "polls", "tasks" ],
 			"startDate" : "",
 			"dueDate" : "",
 			"type" : "project"
@@ -128,7 +128,7 @@ function onGroupSave() {
     group.description = "This is a deal room created for collaborating on the deal \"" + group.description + "\"";
     group.displayName = $("#group-name").val();
     group.groupType = "PRIVATE";
-    group.contentTypes = [ "documents", "files", "discussions", "projects" ];
+    group.contentTypes = [ "documents", "files", "discussions", "polls", "projects" ];
     group.name = $("#group-name").val();
     if (adding) {
         osapi.jive.corev3.groups.create(group).execute(onGroupCreated);
