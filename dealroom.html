@@ -9,7 +9,7 @@
     <script type="text/javascript">
 
 // Flag indicating we are in add mode
-var adding = false;
+var adding = true;
 
 // Currently selected group
 var group;
@@ -23,45 +23,26 @@ var viewer;
 // On view load, wire up static actions and retrieve initial data
 function init() {
     osapi.jive.corev3.people.getViewer({}).execute(function(response) {});
-    $("#group-add-button").click(onGroupAdd);
     $("#group-create-button").click(onGroupSave);
     mini = new gadgets.MiniMessage();
     loadGroups();
 }
 
-function onGroupAdd() {
-    group = {
-        displayName : "",
-        followerCount : 0,
-        groupType : "",
-        memberCount : 0,
-        name : "",
-        type : "group"
-    };
-    $("#group-header").html("").html("Add Social Group");
-    adding = true;
-    populateGroupDiv();
-    showOnly("group-div");
-}
 
 function onGroupAdded(response) {
     if (response.error) {
         mini.createDismissibleMessage("Error creating new social group: " + response.error.message);
     }
-    loadGroups();
 }
 
 function onGroupSave() {
     group.description = $("#group-name").val();
-   group.description = "This is a deal room created for discussing " + group.description;
+    group.description = "This is a deal room created for discussing " + group.description;
     group.displayName = $("#group-name").val();
     group.groupType = "PRIVATE";
     group.name = $("#group-name").val();
     if (adding) {
         osapi.jive.corev3.groups.create(group).execute(onGroupAdded);
-    }
-    else {
-        group.update().execute(onGroupUpdated);
     }
 }
 
