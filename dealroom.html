@@ -128,7 +128,8 @@ function onGroupCreated(response) {
 	//mini.createDismissibleMessage("Group created at: " + response.resources.html.ref);
 	
 	// Setting the GLOBAL so as to use it for the content-load
-	var targetGroupID = response.resources.self.ref;
+	targetGroupID = response.resources.self.ref;
+	console.log("target group ID is:" +targetGroupID);
 	
 	var gMessage = document.getElementById("response-message");
 	gMessage.innerHTML = "Group successfully created. <br /> Click <a href=\""+response.resources.html.ref+"\">here</a> to visit the group";
