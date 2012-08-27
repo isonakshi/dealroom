@@ -11,8 +11,11 @@
 // Flag indicating we are in add mode
 var adding = true;
 
-// Currently selected group
+// Jive Group selector
 var group;
+
+// Jive Project selector
+var project;
 
 // Factory for mini messages
 var mini;
@@ -27,14 +30,51 @@ function init() {
     mini = new gadgets.MiniMessage();
 }
 
-
-function onGroupAdded(response) {
+function onProjectCreated(response) {
     if (response.error) {
-        mini.createDismissibleMessage("Error creating new social group: " + response.error.message);
+        mini.createDismissibleMessage("Error creating new social project: " + response.error.message);
     }
-    else
+	else
 	{
+		console.log("Project: "+JSON.Stringify(response));
+		mini.createDismissibleMessage("Project created with the ID: " + response.id);	
+	}
+}
+
+function onGroupCreated(response) {
+	if (response.error) {
+	mini.createDismissibleMessage("Error creating new social group: " + response.error.message);
+	}
+	
+	else
+	{
+		console.log("Group: "+JSON.Stringify(response));
 		mini.createDismissibleMessage("Group created with the ID: " + response.id);
+		// Add GROUP Content-Copying here!
+		
+		//Project creation within the newly created group
+		var pStartDateAbs = new Date ($("#group-name").val()); //Project Start
+		var pStartDate = pStartDateAbs.toISOString();
+		var pName = response.name;
+		var pParent = response.id;
+		
+		project = {
+			"displayName": "",
+			"name": "",
+			"parent" : "",
+			"contentTypes" : [ "documents", "files", "discussions", "polls", "projects", "tasks" ],
+			"startDate" : "",
+			"dueDate" : ""
+		};
+		
+		project.displayName = pName;
+		project.name = "Project for the deal" + pName;
+		project.parent = "https://accenture.jiveon.com/groups/" + pParent;
+		project.startDate = pStartDate;
+		project.dueDate = pStartDate;
+		
+		osapi.jive.corev3.projects.create(project).execute(onProjectCreated);
+		
 	}
 }
 
@@ -52,9 +92,10 @@ function onGroupSave() {
     group.description = "This is a deal room created for discussing " + group.description;
     group.displayName = $("#group-name").val();
     group.groupType = "PRIVATE";
+	group.contentTypes = [ "documents", "files", "discussions", "projects" ];
     group.name = $("#group-name").val();
     if (adding) {
-        osapi.jive.corev3.groups.create(group).execute(onGroupAdded);
+        osapi.jive.corev3.groups.create(group).execute(onGroupCreated);
     }
 }
 
@@ -75,6 +116,18 @@ gadgets.util.registerOnLoadHandler(init);
                     <input id="group-name" class="group-input" type="text" size=50/>
                 </td>
             </tr>
+            <tr>
+                <th>Project Start Date:</th>
+                <td>
+                    <input id="project-start-date" class="group-input" type="text" size=50/>
+                </td>
+            </tr>
+            <tr>
+                <th>Project Due Date:</th>
+                <td>
+                    <input id="project-due-date" class="group-input" type="text" size=50/>
+                </td>
+            </tr>			
             <tr>
                 <th>&nbsp;</th>
                 <td>
