@@ -36,7 +36,7 @@ function onProjectCreated(response) {
     }
 	else
 	{
-		console.log("Project: "+JSON.Stringify(response));
+		console.log("Project: "+JSON.stringify(response));
 		mini.createDismissibleMessage("Project created with the ID: " + response.id);	
 	}
 }
@@ -48,7 +48,7 @@ function onGroupCreated(response) {
 	
 	else
 	{
-		console.log("Group: "+JSON.Stringify(response));
+		console.log("Group: "+JSON.stringify(response));
 		mini.createDismissibleMessage("Group created with the ID: " + response.id);
 		// Add GROUP Content-Copying here!
 		
@@ -92,7 +92,7 @@ function onGroupSave() {
     group.description = "This is a deal room created for discussing " + group.description;
     group.displayName = $("#group-name").val();
     group.groupType = "PRIVATE";
-	group.contentTypes = [ "documents", "files", "discussions", "projects" ];
+    group.contentTypes = [ "documents", "files", "discussions", "projects" ];
     group.name = $("#group-name").val();
     if (adding) {
         osapi.jive.corev3.groups.create(group).execute(onGroupCreated);
