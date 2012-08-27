@@ -81,7 +81,7 @@ function onDiscFetch(response) {
 	postDisc.parent = targetGroupID;
 	
 	osapi.jive.corev3.discussions.create (postDisc);
-	}
+	});
     console.log ("Discussions: "+JSON.stringify(discussions));
 }
 
