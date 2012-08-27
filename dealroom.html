@@ -1,15 +1,15 @@
 <html>
 <head>
 
-    <link type="text/css" href="css/custom-theme/jquery-ui-1.8.16.custom.css" rel="stylesheet"/>
-    <link type="text/css" href="css/custom-theme/jive-elements.css" rel="stylesheet"/>
-    <link type="text/css" href="css/custom-theme/jive-icons.css" rel="stylesheet"/>
-    <link type="text/css" href="css/security-groups.css" rel="stylesheet"/>
+<link type="text/css" href="css/custom-theme/jquery-ui-1.8.16.custom.css" rel="stylesheet"/>
+<link type="text/css" href="css/custom-theme/jive-elements.css" rel="stylesheet"/>
+<link type="text/css" href="css/custom-theme/jive-icons.css" rel="stylesheet"/>
+<link type="text/css" href="css/security-groups.css" rel="stylesheet"/>
 
-    <script type="text/javascript">
+<script type="text/javascript">
 
 // Templates' IDs for the current AI instance
-var templateGroup = 2004; //actually, a SPACE
+var templateSpace = 2004; //actually, a SPACE
 var templateProject = 1001;
 
 // Flag indicating we are in add mode
@@ -49,15 +49,14 @@ function ISODateString(d){
 // Defines what needs to be done once Project is created
 
 function onProjectCreated(response) {
-    if (response.error) {
-        mini.createDismissibleMessage("Error creating new social project: " + response.error.message);
-    }
-	else
-	{
-		console.log("Project: "+JSON.stringify(response));
-		//mini.createDismissibleMessage("Project created with the ID: " + response.id);
-		var gMessage = document.getElementById("response-message");
-		gMessage.innerHTML = gMessage.innerHTML + "<br/>Click <a href=\""+response.resources.html.ref+"\">here</a> to visit the Project";
+	if (response.error) {
+	mini.createDismissibleMessage("Error creating new social project: " + response.error.message);
+	}
+	else {
+	console.log("Project: "+JSON.stringify(response));
+	//mini.createDismissibleMessage("Project created with the ID: " + response.id);
+	var gMessage = document.getElementById("response-message");
+	gMessage.innerHTML = gMessage.innerHTML + "<br/>Click <a href=\""+response.resources.html.ref+"\">here</a> to visit the Project";
 	}
 }
 
@@ -70,46 +69,45 @@ function onGroupCreated(response) {
 	mini.createDismissibleMessage("Error creating new social group: " + response.error.message);
 	}
 	
-	else
-	{
-		console.log("Group: "+JSON.stringify(response));
-		//mini.createDismissibleMessage("Group created at: " + response.resources.html.ref);
-		var gMessage = document.getElementById("response-message");
-		gMessage.innerHTML = "Group successfully created. <br /> Click <a href=\""+response.resources.html.ref+"\">here</a> to visit the group";
-		// Add GROUP Content-Copying here!
-		//Project creation within the newly created group
-		
-		var pStartDateEntry = $("#project-start-date").val(); //Project Start
-		var pStartDateAbs = new Date(pStartDateEntry);
-		var pStartDate = ISODateString(pStartDateAbs);
-		
-		var pDueDateEntry = $("#project-due-date").val(); //Project Start
-		var pDueDateAbs = new Date(pDueDateEntry);
-		var pDueDate = ISODateString(pDueDateAbs);
-		
-		var pName = response.name;
-		//var pParent = response.id;
-		var pParent = response.resources.self.ref;
-		
-		project = {
-			"displayName": "",
-			"name": "",
-			"parent" : "",
-			"contentTypes" : [ "documents", "files", "discussions", "polls", "tasks" ],
-			"startDate" : "",
-			"dueDate" : "",
-			"type" : "project"
-		};
-		
-		sourceProject = project;
+	else {
+	console.log("Group: "+JSON.stringify(response));
+	//mini.createDismissibleMessage("Group created at: " + response.resources.html.ref);
+	var gMessage = document.getElementById("response-message");
+	gMessage.innerHTML = "Group successfully created. <br /> Click <a href=\""+response.resources.html.ref+"\">here</a> to visit the group";
+	// Add GROUP Content-Copying here!
+	//Project creation within the newly created group
+	
+	var pStartDateEntry = $("#project-start-date").val(); //Project Start
+	var pStartDateAbs = new Date(pStartDateEntry);
+	var pStartDate = ISODateString(pStartDateAbs);
+	
+	var pDueDateEntry = $("#project-due-date").val(); //Project Start
+	var pDueDateAbs = new Date(pDueDateEntry);
+	var pDueDate = ISODateString(pDueDateAbs);
+	
+	var pName = response.name;
+	//var pParent = response.id;
+	var pParent = response.resources.self.ref;
+	
+	project = {
+		"displayName": "",
+		"name": "",
+		"parent" : "",
+		"contentTypes" : [ "documents", "files", "discussions", "polls", "tasks" ],
+		"startDate" : "",
+		"dueDate" : "",
+		"type" : "project"
+	};
+	
+	sourceProject = project;
 
-		project.displayName = pName;
-		project.name = "Project for " + pName;
-		project.parent = pParent;;
-		project.startDate = pStartDate;
-		project.dueDate = pDueDate;
-		
-		osapi.jive.corev3.projects.create(project).execute(onProjectCreated);
+	project.displayName = pName;
+	project.name = "Project for " + pName;
+	project.parent = pParent;;
+	project.startDate = pStartDate;
+	project.dueDate = pDueDate;
+	
+	osapi.jive.corev3.projects.create(project).execute(onProjectCreated);
 	}
 }
 
@@ -143,35 +141,35 @@ gadgets.util.registerOnLoadHandler(init);
 
 <body>
 <div id="wrapper">
-    <div id="group-div" class="top-level-div">
-        <h3 id="group-header"></h3>
-        <table class="j-table">
-            <tr>
-                <th>Deal Room Name:</th>
-                <td>
-                    <input id="group-name" class="group-input" type="text" value="Dummy Deal Room 1" size=50/>
-                </td>
-            </tr>
-            <tr>
-                <th>Project Start Date (YYYY-MM-DD):</th>
-                <td>
-                    <input id="project-start-date" class="group-input" type="text" value="2012-09-09" size=50/>
-                </td>
-            </tr>
-            <tr>
-                <th>Project Due Date (YYYY-MM-DD):</th>
-                <td>
-                    <input id="project-due-date" class="group-input" type="text" value="2012-12-12" size=50/>
-                </td>
-            </tr>			
-            <tr>
-                <th>&nbsp;</th>
-                <td>
-                    <button id="group-create-button">Create Deal Room</button>
-                </td>
-            </tr>
-        </table>
-    </div>
+	<div id="group-div" class="top-level-div">
+		<h3 id="group-header"></h3>
+		<table class="j-table">
+		    <tr>
+		        <th>Deal Room Name:</th>
+		        <td>
+		            <input id="group-name" class="group-input" type="text" value="Dummy Deal Room 1" size=50/>
+		        </td>
+		    </tr>
+		    <tr>
+		        <th>Project Start Date (YYYY-MM-DD):</th>
+		        <td>
+		            <input id="project-start-date" class="group-input" type="text" value="2012-09-09" size=50/>
+		        </td>
+		    </tr>
+		    <tr>
+		        <th>Project Due Date (YYYY-MM-DD):</th>
+		        <td>
+		            <input id="project-due-date" class="group-input" type="text" value="2012-12-12" size=50/>
+		        </td>
+		    </tr>			
+		    <tr>
+		        <th>&nbsp;</th>
+		        <td>
+		            <button id="group-create-button">Create Deal Room</button>
+		        </td>
+		    </tr>
+		</table>
+	</div>
 	<div id="response-message"></div>
 </div>
 </body>
