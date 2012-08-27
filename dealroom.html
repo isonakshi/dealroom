@@ -20,9 +20,6 @@ var project;
 // Factory for mini messages
 var mini;
 
-// Viewer
-var viewer;
-
 // On view load, wire up static actions and retrieve initial data
 function init() {
     osapi.jive.corev3.people.getViewer({}).execute(function(response) {});
@@ -41,6 +38,22 @@ function onProjectCreated(response) {
 	}
 }
 
+/* use a function for the exact format desired... */
+/* for ISO 8601 Date */
+function ISODateString(d){
+  function pad(n){return n<10 ? '0'+n : n}
+  return d.getUTCFullYear()+'-'
+      + pad(d.getUTCMonth()+1)+'-'
+      + pad(d.getUTCDate())+'T'
+      + pad(d.getUTCHours())+':'
+      + pad(d.getUTCMinutes())+':'
+      + pad(d.getUTCSeconds())+'Z'
+}
+
+// Defines what needs to be done, once group is created
+// 1. Copy the contents from template group to the new
+// 2. Create Project
+
 function onGroupCreated(response) {
 	if (response.error) {
 	mini.createDismissibleMessage("Error creating new social group: " + response.error.message);
@@ -57,11 +70,11 @@ function onGroupCreated(response) {
 		
 		var pStartDateEntry = $("#project-start-date").val(); //Project Start
 		var pStartDateAbs = new Date(pStartDateEntry);
-		var pStartDate = pStartDateAbs.toISOString();
+		var pStartDate = ISODateString(pStartDateAbs);
 		
 		var pDueDateEntry = $("#project-due-date").val(); //Project Start
 		var pDueDateAbs = new Date(pDueDateEntry);
-		var pDueDate = pDueDateAbs.toISOString();
+		var pDueDate = ISODateString(pDueDateAbs);
 		
 		var pName = response.name;
 		//var pParent = response.id;
