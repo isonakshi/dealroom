@@ -29,6 +29,7 @@ function init() {
 
 
 function onGroupAdded(response) {
+    console.log (response);
     if (response.error) {
         mini.createDismissibleMessage("Error creating new social group: " + response.error.message);
     }
