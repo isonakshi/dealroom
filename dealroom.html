@@ -86,7 +86,9 @@ function createDisc (disc)
 function createContent(eachContentPiece)
 {
 	if (group.type == "discussions")
+	{	mini.createDismissibleMessage("OK, I am here");
 		createDisc(eachContentPiece);
+	}
 }
 
 //Fetching Content and creating each piece of content
