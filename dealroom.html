@@ -11,7 +11,7 @@
 // Templates' IDs for the current AI instance
 var templateSpace = "/places/1060"; //actually, a SPACE
 var templateSpaceURI = "https://accenture.jiveon.com/community/deal-room-template";
-var templateProject = "/places/1001";
+var templateProject = "/places/1029";
 var templateProjectURI = "https://accenture.jiveon.com/community/deal-room-template/projects/rfp-response-template-project";
 
 // Flag indicating we are in add mode
@@ -92,6 +92,169 @@ function onDiscFetch(response) {
     //console.log ("Discussions: "+JSON.stringify(discussions));
 }
 
+//Fetching Documents
+function onDocFetch(response) {
+    if (response.error) {
+        mini.createDismissibleMessage("Unable to fetch documents: " + response.error.message);
+        return;
+    }
+    var documents = response.list;
+	console.log ("Documents: "+JSON.stringify(documents));
+	var postDoc;
+	
+	$.each(documents, function(index, group) {
+	postDoc = {
+	type : "",
+	tags : [],
+	subject : "",
+	content : {
+		text : "",
+		type : ""
+	},
+	question : "",
+	parent : ""
+	}
+	
+	postDoc.type = group.type;
+	postDoc.tags = group.tags;
+	postDoc.subject = group.subject;
+	postDoc.content = group.content;
+	postDoc.question = group.question;
+	postDoc.parent = targetGroupID;
+	console.log ("Document "+index+" :"+JSON.stringify(postDoc));
+	osapi.jive.corev3.documents.create(postDoc).execute(onContentCreated);
+	});
+    console.log ("Final Documents: "+JSON.stringify(documents));
+}
+
+
+//Fetching Tasks
+function onTaskFetch(response) {
+    if (response.error) {
+        mini.createDismissibleMessage("Unable to fetch tasks: " + response.error.message);
+        return;
+    }
+    var tasks = response.list;
+	console.log ("Tasks: "+JSON.stringify(tasks));
+	var postTask;
+	
+	$.each(tasks, function(index, group) {
+	postTask = {
+	type : "",
+	subject : "",
+	content : {
+		text : "",
+		type : ""
+	},
+	dueDate : "",
+	parent : ""
+	}
+	
+	postTask.type = group.type;
+	postTask.dueDate = group.dueDate;
+	postTask.subject = group.subject;
+	postTask.content = group.content;
+	postTask.parent = targetProjID;
+	console.log ("Task "+index+" :"+JSON.stringify(postTask));
+	osapi.jive.corev3.tasks.create(postTask).execute(onContentCreated);
+	});
+    console.log ("Final Tasks: "+JSON.stringify(tasks));
+}
+
+//Fetching Files
+function onFileFetch(response) {
+    if (response.error) {
+        mini.createDismissibleMessage("Unable to fetch files: " + response.error.message);
+        return;
+    }
+    var files = response.list;
+	console.log ("Files: "+JSON.stringify(files));
+	var postFile;
+	
+	$.each(files, function(index, group) {
+	postFile = {
+	
+	type : "",
+	filename : ""
+	}
+	
+	postFile.type = group.type;
+	postFile.filename = group.filename;
+	console.log ("File "+index+" :"+JSON.stringify(postFile));
+	osapi.jive.corev3.statics.create(postFile).execute(onContentCreated);
+	});
+    console.log ("Final Files: "+JSON.stringify(files));
+}
+
+//Fetching Polls
+function onPollFetch(response) {
+    if (response.error) {
+        mini.createDismissibleMessage("Unable to fetch polls: " + response.error.message);
+        return;
+    }
+    var polls = response.list;
+	var postPoll;
+	
+	$.each(polls, function(index, group) {
+	postPoll = {
+	type : "",
+	tags : [],
+	subject : "",
+	content : {
+		text : "",
+		type : ""
+	},
+	options :[],
+	parent : ""
+	}
+	
+	postPoll.type = group.type;
+	postPoll.tags = group.tags;
+	postPoll.subject = group.subject;
+	postPoll.content = group.content;
+	postPoll.options = group.options;
+	postPoll.parent = targetGroupID;
+	console.log ("Poll "+index+" :"+JSON.stringify(postPoll));
+	osapi.jive.corev3.polls.create(postPoll).execute(onContentCreated);
+	});
+    //console.log ("Polls: "+JSON.stringify(polls));
+}
+
+//Fetching Check Points
+function onCheckPointFetch(response) {
+console.log ("::::::::::::inside onCheckPointFetch:::::::::: ");
+    if (response.error) {
+        mini.createDismissibleMessage("Unable to fetch checkpoints: " + response.error.message);
+        return;
+    }
+    var checkpoints = response.list;
+	var postCheckpoint;
+	
+	$.each(checkpoints, function(index, group) {
+	postCheckpoint = {
+	type : "",
+	tags : [],
+	subject : "",
+	content : {
+		text : "",
+		type : ""
+	},
+	parent : ""
+	}
+	
+	postCheckpoint.type = group.type;
+	postCheckpoint.tags = group.tags;
+	postCheckpoint.subject = group.subject;
+	postCheckpoint.content = group.content;
+	postCheckpoint.options = group.options;
+	postCheckpoint.parent = targetGroupID;
+	console.log ("CheckPoint "+index+" :"+JSON.stringify(postCheckpoint));
+	osapi.jive.corev3.places.Project.setCheckpoints(postCheckpoint).execute(onContentCreated);
+	});
+    //console.log ("Check Points: "+JSON.stringify(checkpoints));
+}
+
+//Loading Discussions
 function loadDiscussions(source) {
 osapi.jive.corev3.discussions.get ({
         fields : '@all',
@@ -99,6 +262,42 @@ osapi.jive.corev3.discussions.get ({
     }).execute(onDiscFetch);
 }
 
+//Loading Documents
+function loadDocuments(source) {
+osapi.jive.corev3.documents.get ({
+        fields : '@all',
+	place : source
+    }).execute(onDocFetch);
+}
+
+//Loading Tasks
+function loadTasks(source) {
+osapi.jive.corev3.tasks.get({
+        fields : '@all',
+	place : source
+    }).execute(onTaskFetch);
+}
+
+//Loading Files
+function loadFiles(source) {
+osapi.jive.corev3.statics.get({
+        fields : '@all',
+	uri : source
+    }).execute(onFileFetch);
+}
+
+//Loading Polls
+function loadPolls(source) {
+osapi.jive.corev3.polls.get({
+        fields : '@all',
+	place : source
+    }).execute(onPollFetch);
+}
+
+//Loading Check Points
+function loadCheckPoints(source) {
+osapi.jive.corev3.places.Project.getCheckpoints().execute(onCheckPointFetch);
+}
 
 // Defines what needs to be done once Project is created
 
@@ -107,10 +306,18 @@ function onProjectCreated(response) {
 	mini.createDismissibleMessage("Error creating new social project: " + response.error.message);
 	}
 	else {
+	targetProjID = response.resources.self.ref;
+	console.log("target project ID is:" +targetProjID);
 	//console.log("Project: "+JSON.stringify(response));
 	//mini.createDismissibleMessage("Project created with the ID: " + response.id);
 	var gMessage = document.getElementById("response-message");
 	gMessage.innerHTML = gMessage.innerHTML + "<br />Click <a href=\""+response.resources.html.ref+"\">here</a> to visit the Project";
+	//loadTasks(templateProject);
+	//loadCheckPoints(templateProject);
+		loadDiscussions(templateProject);
+    loadDocuments(templateProject);
+    //loadFiles(templateSpace);	
+	loadPolls(templateProject);
 	}
 }
 
@@ -135,7 +342,9 @@ function onGroupCreated(response) {
 	gMessage.innerHTML = "Group successfully created. <br /> Click <a href=\""+response.resources.html.ref+"\">here</a> to visit the group";
 	// Add GROUP Content-Copying here!
 	loadDiscussions(templateSpace);
-
+    loadDocuments(templateSpace);
+    //loadFiles(templateSpace);	
+	loadPolls(templateSpace);
 
 	//Project creation within the newly created group
 	
