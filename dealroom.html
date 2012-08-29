@@ -52,13 +52,15 @@ function ISODateString(d){
       + pad(d.getUTCSeconds())+'.000+0000'
 }
 
+// 
 function onContentCreated (response) {
     if (response.error) {
-        mini.createDismissibleMessage("Unable to create discussions: " + response.error.message);
+        mini.createDismissibleMessage("Unable to create : " + response.error.message);
         return;
     }
 }
 
+// 
 function onDiscFetch(response) {
     if (response.error) {
         mini.createDismissibleMessage("Unable to fetch discussions: " + response.error.message);
@@ -86,7 +88,7 @@ function onDiscFetch(response) {
 	postDisc.content = group.content;
 	postDisc.question = group.question;
 	postDisc.parent = targetGroupID;
-	console.log ("Discussion "+index+" :"+JSON.stringify(postDisc));
+	//console.log ("Discussion "+index+" :"+JSON.stringify(postDisc));
 	osapi.jive.corev3.discussions.create(postDisc).execute(onContentCreated);
 	});
     //console.log ("Discussions: "+JSON.stringify(discussions));
@@ -99,7 +101,7 @@ function onDocFetch(response) {
         return;
     }
     var documents = response.list;
-	console.log ("Documents: "+JSON.stringify(documents));
+	//console.log ("Documents: "+JSON.stringify(documents));
 	var postDoc;
 	
 	$.each(documents, function(index, group) {
@@ -121,12 +123,11 @@ function onDocFetch(response) {
 	postDoc.content = group.content;
 	postDoc.question = group.question;
 	postDoc.parent = targetGroupID;
-	console.log ("Document "+index+" :"+JSON.stringify(postDoc));
+	//console.log ("Document "+index+" :"+JSON.stringify(postDoc));
 	osapi.jive.corev3.documents.create(postDoc).execute(onContentCreated);
 	});
-    console.log ("Final Documents: "+JSON.stringify(documents));
+    //console.log ("Final Documents: "+JSON.stringify(documents));
 }
-
 
 //Fetching Tasks
 function onTaskFetch(response) {
@@ -135,7 +136,7 @@ function onTaskFetch(response) {
         return;
     }
     var tasks = response.list;
-	console.log ("Tasks: "+JSON.stringify(tasks));
+	//console.log ("Tasks: "+JSON.stringify(tasks));
 	var postTask;
 	
 	$.each(tasks, function(index, group) {
@@ -155,10 +156,10 @@ function onTaskFetch(response) {
 	postTask.subject = group.subject;
 	postTask.content = group.content;
 	postTask.parent = targetProjID;
-	console.log ("Task "+index+" :"+JSON.stringify(postTask));
+	//console.log ("Task "+index+" :"+JSON.stringify(postTask));
 	osapi.jive.corev3.tasks.create(postTask).execute(onContentCreated);
 	});
-    console.log ("Final Tasks: "+JSON.stringify(tasks));
+    //console.log ("Final Tasks: "+JSON.stringify(tasks));
 }
 
 //Fetching Files
@@ -168,7 +169,7 @@ function onFileFetch(response) {
         return;
     }
     var files = response.list;
-	console.log ("Files: "+JSON.stringify(files));
+	//console.log ("Files: "+JSON.stringify(files));
 	var postFile;
 	
 	$.each(files, function(index, group) {
@@ -180,10 +181,10 @@ function onFileFetch(response) {
 	
 	postFile.type = group.type;
 	postFile.filename = group.filename;
-	console.log ("File "+index+" :"+JSON.stringify(postFile));
+	//console.log ("File "+index+" :"+JSON.stringify(postFile));
 	osapi.jive.corev3.statics.create(postFile).execute(onContentCreated);
 	});
-    console.log ("Final Files: "+JSON.stringify(files));
+    //console.log ("Final Files: "+JSON.stringify(files));
 }
 
 //Fetching Polls
@@ -214,7 +215,7 @@ function onPollFetch(response) {
 	postPoll.content = group.content;
 	postPoll.options = group.options;
 	postPoll.parent = targetGroupID;
-	console.log ("Poll "+index+" :"+JSON.stringify(postPoll));
+	//console.log ("Poll "+index+" :"+JSON.stringify(postPoll));
 	osapi.jive.corev3.polls.create(postPoll).execute(onContentCreated);
 	});
     //console.log ("Polls: "+JSON.stringify(polls));
@@ -222,7 +223,7 @@ function onPollFetch(response) {
 
 //Fetching Check Points
 function onCheckPointFetch(response) {
-console.log ("::::::::::::inside onCheckPointFetch:::::::::: ");
+//console.log ("::::::::::::inside onCheckPointFetch:::::::::: ");
     if (response.error) {
         mini.createDismissibleMessage("Unable to fetch checkpoints: " + response.error.message);
         return;
@@ -248,10 +249,15 @@ console.log ("::::::::::::inside onCheckPointFetch:::::::::: ");
 	postCheckpoint.content = group.content;
 	postCheckpoint.options = group.options;
 	postCheckpoint.parent = targetGroupID;
-	console.log ("CheckPoint "+index+" :"+JSON.stringify(postCheckpoint));
+	//console.log ("CheckPoint "+index+" :"+JSON.stringify(postCheckpoint));
 	osapi.jive.corev3.places.Project.setCheckpoints(postCheckpoint).execute(onContentCreated);
 	});
     //console.log ("Check Points: "+JSON.stringify(checkpoints));
+}
+
+//Fetching Content
+function onContentFetch(response) {
+console.log ("Content: "+JSON.stringify(response.list));
 }
 
 //Loading Discussions
@@ -281,7 +287,7 @@ osapi.jive.corev3.tasks.get({
 //Loading Files
 function loadFiles(source) {
 osapi.jive.corev3.statics.get({
-        fields : '@all',
+    fields : '@all',
 	uri : source
     }).execute(onFileFetch);
 }
@@ -299,15 +305,22 @@ function loadCheckPoints(source) {
 osapi.jive.corev3.places.Project.getCheckpoints().execute(onCheckPointFetch);
 }
 
-// Defines what needs to be done once Project is created
+// Testing Load Content!
+function loadContent (source) {
+osapi.jive.corev3.contents.get({
+    fields : '@all',
+	place : source
+    }).execute(onContentFetch);
+}
 
+// Defines what needs to be done once Project is created
 function onProjectCreated(response) {
 	if (response.error) {
 	mini.createDismissibleMessage("Error creating new social project: " + response.error.message);
 	}
 	else {
 	targetProjID = response.resources.self.ref;
-	console.log("target project ID is:" +targetProjID);
+	//console.log("target project ID is:" +targetProjID);
 	//console.log("Project: "+JSON.stringify(response));
 	//mini.createDismissibleMessage("Project created with the ID: " + response.id);
 	var gMessage = document.getElementById("response-message");
@@ -322,9 +335,8 @@ function onProjectCreated(response) {
 }
 
 // Defines what needs to be done once group is created
-// 1. Copy the contents from template group to the new
+// 1. Copy the contents from template group to the new group.
 // 2. Create Project
-
 function onGroupCreated(response) {
 	if (response.error) {
 	mini.createDismissibleMessage("Error creating new social group: " + response.error.message);
@@ -336,16 +348,16 @@ function onGroupCreated(response) {
 	
 	// Setting the GLOBAL so as to use it for the content-load
 	targetGroupID = response.resources.self.ref;
-	console.log("target group ID is:" +targetGroupID);
+	//console.log("target group ID is:" +targetGroupID);
 	
 	var gMessage = document.getElementById("response-message");
 	gMessage.innerHTML = "Group successfully created. <br /> Click <a href=\""+response.resources.html.ref+"\">here</a> to visit the group";
 	// Add GROUP Content-Copying here!
 	loadDiscussions(templateSpace);
     loadDocuments(templateSpace);
-    //loadFiles(templateSpace);	
-	loadPolls(templateSpace);
-
+    loadFiles(templateSpace);	
+	//loadPolls(templateSpace);
+	loadContent (templateSpace);
 	//Project creation within the newly created group
 	
 	var pStartDateEntry = $("#project-start-date").val(); //Project Start
@@ -382,6 +394,7 @@ function onGroupCreated(response) {
 	}
 }
 
+// 
 function onGroupSave() {
     group = {
         displayName : "",
