@@ -52,19 +52,45 @@ function ISODateString(d){
       + pad(d.getUTCSeconds())+'.000+0000'
 }
 
-function onDiscFetch(response) {
-console.log ("Discussions: "+JSON.stringify(response.list));
+function createDisc (disc)
+{
+	var postDisc = {
+	type : "",
+	tags : [],
+	subject : "",
+	content : {
+		text : "",
+		type : ""
+	},
+	question : "",
+	parent : ""
+	}
+	
+	postDisc.type = disc.type;
+	postDisc.tags = disc.tags;
+	postDisc.subject = disc.subject;
+	postDisc.content = disc.content;
+	postDisc.question = disc.question;
+	postDisc.parent = targetGroupID;
+	
+	osapi.jive.corev3.discussions.create(postDisc).execute(onContentCreated);
 }
 
-function loadDisc() {
-osapi.jive.corev3.discussions.get({
-    fields : '@all'
-	}).execute(onDiscFetch);
+function createContent(eachContentPiece)
+{
+	if (group.type == "discussions")
+		createDisc(eachContentPiece);
 }
 
 //Fetching Content and creating each piece of content
 function onContentFetch(response) {
-console.log ("Content: "+JSON.stringify(response.list));
+	console.log ("Content: "+JSON.stringify(response.list));
+	var allContent = response.list;
+	$.each(allContent, function(index, group) {
+		var eachContentPiece = group;
+		createContent(group);	
+	});
+
 }
 
 // Load Content!
@@ -98,7 +124,7 @@ function onProjectCreated(response) {
 // 2. Create Project
 function onGroupCreated(response) {
 	if (response.error) {
-	mini.createDismissibleMessage("Error creating new social group: " + response.error.message);
+	console.log("Error creating new social group: " + response.error.message);
 	}
 	
 	else {
@@ -131,7 +157,7 @@ function onGroupCreated(response) {
 		"displayName": "",
 		"name": "",
 		"parent" : "",
-		"contentTypes" : [ "documents", "files", "discussions", "polls", "tasks" ],
+		"contentTypes" : [ "blogs", "documents", "files", "discussions", "polls", "tasks" ],
 		"startDate" : "",
 		"dueDate" : "",
 		"type" : "project"
@@ -165,7 +191,7 @@ function onGroupSave() {
     group.description = "This is a deal room created for collaborating on the deal \"" + group.description + "\"";
     group.displayName = $("#group-name").val();
     group.groupType = "PRIVATE";
-    group.contentTypes = [ "documents", "files", "discussions", "polls", "projects" ];
+    group.contentTypes = [ "blog", "documents", "files", "discussions", "polls", "projects" ];
     group.name = $("#group-name").val();
     if (adding) {
         osapi.jive.corev3.groups.create(group).execute(onGroupCreated);
