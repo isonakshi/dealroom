@@ -85,7 +85,7 @@ function createDisc (disc)
 
 function createContent(eachContentPiece)
 {
-	if (eachContentPiece.type == "discussions")
+	if (eachContentPiece.type == "discussion")
 	{	mini.createDismissibleMessage("OK, I am here");
 		createDisc(eachContentPiece);
 	}
@@ -97,8 +97,8 @@ function onContentFetch(response) {
 	var allContent = response.list;
 	$.each(allContent, function(index, group) {
 		var eachContentPiece = group;
-		console.log("Content "+index+": "+JSON.stringify(group));
-		createContent(group);	
+		console.log("Content "+index+": "+JSON.stringify(eachContentPiece));
+		createContent(eachContentPiece);	
 	});
 
 }
