@@ -52,6 +52,13 @@ function ISODateString(d){
       + pad(d.getUTCSeconds())+'.000+0000'
 }
 
+function onContentCreated (response) {
+    if (response.error) {
+        mini.createDismissibleMessage("Unable to create : " + response.error.message);
+        return;
+    }
+}
+
 function createDisc (disc)
 {
 	var postDisc = {
