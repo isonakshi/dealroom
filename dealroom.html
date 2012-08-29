@@ -162,6 +162,7 @@ function onTaskFetch(response) {
     //console.log ("Final Tasks: "+JSON.stringify(tasks));
 }
 
+/*
 //Fetching Files
 function onFileFetch(response) {
     if (response.error) {
@@ -186,6 +187,7 @@ function onFileFetch(response) {
 	});
     //console.log ("Final Files: "+JSON.stringify(files));
 }
+*/
 
 //Fetching Polls
 function onPollFetch(response) {
@@ -284,6 +286,7 @@ osapi.jive.corev3.tasks.get({
     }).execute(onTaskFetch);
 }
 
+/*
 //Loading Files
 function loadFiles(source) {
 osapi.jive.corev3.statics.get({
@@ -291,6 +294,7 @@ osapi.jive.corev3.statics.get({
 	uri : source
     }).execute(onFileFetch);
 }
+*/
 
 //Loading Polls
 function loadPolls(source) {
