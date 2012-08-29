@@ -97,6 +97,7 @@ function onContentFetch(response) {
 	var allContent = response.list;
 	$.each(allContent, function(index, group) {
 		var eachContentPiece = group;
+		console.log("Content "+index+": "+JSON.stringify(group));
 		createContent(group);	
 	});
 
