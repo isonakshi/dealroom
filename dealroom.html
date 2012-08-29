@@ -331,7 +331,9 @@ function onProjectCreated(response) {
 	gMessage.innerHTML = gMessage.innerHTML + "<br />Click <a href=\""+response.resources.html.ref+"\">here</a> to visit the Project";
 	//loadTasks(templateProject);
 	//loadCheckPoints(templateProject);
-		loadDiscussions(templateProject);
+	console.log("Now....Project");
+	loadContent (templateProject);
+	loadDiscussions(templateProject);
     loadDocuments(templateProject);
     //loadFiles(templateSpace);	
 	loadPolls(templateProject);
@@ -386,7 +388,7 @@ function onGroupCreated(response) {
 		"type" : "project"
 	};
 	
-	sourceProject = project;
+	//sourceProject = project;
 
 	project.displayName = pName;
 	project.name = "Project for " + pName;
