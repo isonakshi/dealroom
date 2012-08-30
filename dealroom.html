@@ -14,9 +14,6 @@ var templateSpaceURI = "https://accenture.jiveon.com/community/deal-room-templat
 var templateProject = "/places/1029";
 var templateProjectURI = "https://accenture.jiveon.com/community/deal-room-template/projects/rfp-response-template-project";
 
-// Flag indicating we are in add mode
-var adding = true;
-
 // Jive Group selector
 var group;
 var sourceSpace;
@@ -54,12 +51,60 @@ function ISODateString(d){
 
 function onContentCreated (response) {
     if (response.error) {
-        mini.createDismissibleMessage("Unable to create : " + response.error.message);
+        console.log("Unable to create : " + response.error.message);
         return;
     }
 }
 
-function createDisc (disc)
+function createIdea (idea, source)
+{
+	var postIdea = {
+	type : "idea",
+	content {
+	type : "text/html"
+	content : ""
+	},
+	subject : "",
+	
+	}
+}
+
+/*
+function createBlog (blog, source)
+{
+	var postBlog = {
+	type : "",
+	parent : source,
+	displayName : "Project Blog",
+	}
+	
+} */
+
+function createDoc (doc, source)
+{
+	var postDoc = {
+	type : "",
+	tags : [],
+	subject : "",
+	content : {
+		text : "",
+		type : ""
+	},
+	question : "",
+	parent : ""
+	}
+	
+	postDoc.type = doc.type;
+	postDoc.tags = doc.tags;
+	postDoc.subject = doc.subject;
+	postDoc.content = doc.content;
+	postDoc.question = doc.question;
+	postDoc.parent = source;
+	osapi.jive.corev3.documents.create(postDoc).execute(onContentCreated);
+	return;
+}
+
+function createDisc (disc, source)
 {
 	var postDisc = {
 	type : "",
@@ -78,27 +123,46 @@ function createDisc (disc)
 	postDisc.subject = disc.subject;
 	postDisc.content = disc.content;
 	postDisc.question = disc.question;
-	postDisc.parent = targetGroupID;
+	postDisc.parent = source;
 	
 	osapi.jive.corev3.discussions.create(postDisc).execute(onContentCreated);
+	return;
 }
 
-function createContent(eachContentPiece)
+function createContent(eachContentPiece, source)
 {
-	if (eachContentPiece.type == "discussion")
-	{	mini.createDismissibleMessage("OK, I am here");
-		createDisc(eachContentPiece);
+	if (eachContentPiece.type == "discussion") {
+		createDisc (eachContentPiece, source);
 	}
+	/* else if (eachContentPiece.type == "document") {
+		createDoc (eachContentPiece, source);
+	}
+	else if (eachContentPiece.type == "blog") {
+		createBlog (eachContentPiece, source);
+	}
+	else if (eachContentPiece.type == "idea") {
+		createIdea (eachContentPiece, source);
+	}
+	else if (eachContentPiece.type == "poll") {
+		createPoll (eachContentPiece, source);
+	}	
+	else if (eachContentPiece.type == "file") {
+		createFile (eachContentPiece, source);
+	}	
+	else {
+		return; 
+	}
+*/
 }
 
 //Fetching Content and creating each piece of content
-function onContentFetch(response) {
-	console.log ("Content: "+JSON.stringify(response.list));
+function onContentFetch(response, source) {
+	console.log ("Source: "+source+" Content: "+JSON.stringify(response.list));
 	var allContent = response.list;
 	$.each(allContent, function(index, group) {
 		var eachContentPiece = group;
-		console.log("Content "+index+": "+JSON.stringify(eachContentPiece));
-		createContent(eachContentPiece);	
+		//console.log("Content "+index+": "+JSON.stringify(eachContentPiece));
+		createContent(eachContentPiece, source);	
 	});
 
 }
@@ -108,7 +172,9 @@ function loadContent (source) {
 osapi.jive.corev3.contents.get({
     fields : '@all',
 	place : source
-    }).execute(onContentFetch);
+    }).execute(function (){
+	onContentFetch(response, source);}
+	);
 }
 
 
@@ -185,7 +251,7 @@ function onGroupCreated(response) {
 	}
 }
 
-// 
+// Creating a Group
 function onGroupSave() {
     group = {
         displayName : "",
@@ -203,9 +269,8 @@ function onGroupSave() {
     group.groupType = "PRIVATE";
     group.contentTypes = [ "blog", "documents", "files", "discussions", "polls", "projects" ];
     group.name = $("#group-name").val();
-    if (adding) {
-        osapi.jive.corev3.groups.create(group).execute(onGroupCreated);
-    }
+    
+	osapi.jive.corev3.groups.create(group).execute(onGroupCreated);
 }
 
 // Register our on-view-load handler
